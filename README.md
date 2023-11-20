@@ -41,7 +41,7 @@ Before running the application, make sure you have the following installed:
 
 ## Important Notes
 
-- This is a basic example for educational purposes. In a production environment, additional security measures and considerations should be implemented.
+- This is a basic example for sample backend purposes. In a production environment, additional security measures and considerations should be implemented.
 
 - Make sure to secure your MongoDB connection and handle errors more gracefully in a real-world scenario.
 
