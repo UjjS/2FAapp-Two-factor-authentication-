@@ -1,0 +1,86 @@
+<!-- index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2FA Example</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    input {
+      margin-bottom: 10px;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>2FA Example</h1>
+  <form id="registrationForm">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required>
+    <button type="button" onclick="register()">Register</button>
+  </form>
+
+  <hr>
+
+  <form id="verificationForm">
+    <label for="verifyUsername">Username:</label>
+    <input type="text" id="verifyUsername" name="verifyUsername" required>
+    <label for="token">Token:</label>
+    <input type="text" id="token" name="token" required>
+    <button type="button" onclick="verify()">Verify</button>
+  </form>
+
+  <hr>
+
+  <div id="qrcodeContainer"></div>
+
+  <script>
+    async function register() {
+      const username = document.getElementById('username').value;
+      const response = await fetch('/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username }),
+      });
+
+      const result = await response.json();
+
+      const qrcodeContainer = document.getElementById('qrcodeContainer');
+      qrcodeContainer.innerHTML = `<img src="${result.data_url}" alt="QR Code">`;
+    }
+
+    async function verify() {
+      const verifyUsername = document.getElementById('verifyUsername').value;
+      const token = document.getElementById('token').value;
+
+      const response = await fetch('/verify', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username: verifyUsername, token }),
+      });
+
+      const result = await response.json();
+
+      if (result.verified) {
+        alert('Verification successful!');
+      } else {
+        alert('Verification failed. Please check your token.');
+      }
+    }
+  </script>
+</body>
+</html>
